@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity =0.8.28;
 
-import { IPancakeFactory } from "./interfaces/IPancakeFactory.sol";
-import { IPancakePair } from "./interfaces/IPancakePair.sol";
-import { IPancakeRouter } from "./interfaces/IPancakeRouter.sol";
-import { IWETH } from "./interfaces/IWETH.sol";
-import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import { SafeERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import {IPancakeFactory} from "./interfaces/IPancakeFactory.sol";
+import {IPancakePair} from "./interfaces/IPancakePair.sol";
+import {IPancakeRouter} from "./interfaces/IPancakeRouter.sol";
+import {IWETH} from "./interfaces/IWETH.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 contract PancakeSwapInteractor {
     using SafeERC20 for IERC20;

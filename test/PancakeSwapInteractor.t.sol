@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity =0.8.28;
 
-import { Test } from "forge-std/Test.sol";
-import { PancakeSwapInteractor } from "../src/PancakeSwapInteractor.sol";
-import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import { MockToken } from "./mocks/MockToken.sol";
-import { IPancakeFactory } from "../src/interfaces/IPancakeFactory.sol";
-import { IPancakeRouter } from "../src/interfaces/IPancakeRouter.sol";
+import {Test} from "forge-std/Test.sol";
+import {PancakeSwapInteractor} from "../src/PancakeSwapInteractor.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {MockToken} from "./mocks/MockToken.sol";
+import {IPancakeFactory} from "../src/interfaces/IPancakeFactory.sol";
+import {IPancakeRouter} from "../src/interfaces/IPancakeRouter.sol";
 
 contract PancakeSwapInteractorTest is Test {
     PancakeSwapInteractor public interactor;
@@ -84,67 +84,50 @@ contract PancakeSwapInteractorTest is Test {
 
     function test_RevertWhenInsufficientLiquidity() public {
         vm.startPrank(address(this));
-        
+
         IPancakeFactory(PANCAKE_FACTORY).createPair(address(newToken), WBNB);
-        
+
         vm.stopPrank();
 
         uint256 exactTokensOut = 10 * 1e18;
         uint256 maxBNBIn = 1 ether;
 
         vm.expectRevert(PancakeSwapInteractor.InsufficientLiquidity.selector);
-        interactor.swapAndAddLiquidity{value: maxBNBIn}(
-            address(newToken),
-            exactTokensOut,
-            block.timestamp + 1
-        );
+        interactor.swapAndAddLiquidity{value: maxBNBIn}(address(newToken), exactTokensOut, block.timestamp + 1);
     }
 
     function test_RevertWhenInsufficientInputAmount() public {
-        uint256 exactTokensOut = 0; 
+        uint256 exactTokensOut = 0;
         uint256 maxBNBIn = 1 ether;
 
         vm.expectRevert(PancakeSwapInteractor.InsufficientInputAmount.selector);
-        interactor.swapAndAddLiquidity{value: maxBNBIn}(
-            BUSD,
-            exactTokensOut,
-            block.timestamp + 1
-        );
+        interactor.swapAndAddLiquidity{value: maxBNBIn}(BUSD, exactTokensOut, block.timestamp + 1);
     }
 
     function test_ReturnUnusedTokens() public {
         uint256 exactTokensOut = 1000 * 1e18; // 10 BUSD
-        uint256 maxBNBIn = 2 ether; 
-        
-        interactor.swapAndAddLiquidity{value: maxBNBIn}(
-            BUSD,
-            exactTokensOut,
-            block.timestamp + 1
-        );
+        uint256 maxBNBIn = 2 ether;
+
+        interactor.swapAndAddLiquidity{value: maxBNBIn}(BUSD, exactTokensOut, block.timestamp + 1);
 
         assertEq(IERC20(BUSD).balanceOf(address(interactor)), 0, "Contract should have no BUSD left");
         assertEq(IERC20(WBNB).balanceOf(address(interactor)), 0, "Contract should have no WBNB left");
         assertEq(address(interactor).balance, 0, "Contract should have no BNB left");
-        
+
         uint256 finalTokenBalance = IERC20(BUSD).balanceOf(address(this));
         assertGt(finalTokenBalance, 0, "Should get some tokens back");
     }
 
     function test_SwapWithCAKE() public {
         uint256 exactTokensOut = 1 * 1e18; // 10 BUSD
-        uint256 maxBNBIn = 2 ether; 
-        
-        interactor.swapAndAddLiquidity{value: maxBNBIn}(
-            CAKE,
-            exactTokensOut,
-            block.timestamp + 1
-        );
+        uint256 maxBNBIn = 2 ether;
+
+        interactor.swapAndAddLiquidity{value: maxBNBIn}(CAKE, exactTokensOut, block.timestamp + 1);
 
         assertEq(IERC20(BUSD).balanceOf(address(interactor)), 0, "Contract should have no BUSD left");
         assertEq(IERC20(WBNB).balanceOf(address(interactor)), 0, "Contract should have no WBNB left");
         assertEq(address(interactor).balance, 0, "Contract should have no BNB left");
     }
-
 
     receive() external payable {}
 }
