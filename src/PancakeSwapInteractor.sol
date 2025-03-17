@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.29;
+pragma solidity 0.8.28;
 
 import "./interfaces/IPancakeFactory.sol";
 import "./interfaces/IPancakePair.sol";
