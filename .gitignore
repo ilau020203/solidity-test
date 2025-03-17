@@ -12,3 +12,16 @@ docs/
 
 # Dotenv file
 .env
+
+# Local files
+.local
+
+# Node modules
+node_modules/
+
+# Solc files
+solc-files/
+
+# coverage files
+coverage_report/
+lcov.info

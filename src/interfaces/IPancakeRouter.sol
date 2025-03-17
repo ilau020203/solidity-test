@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.5.0;
 
-
 interface IPancakeRouter {
     function addLiquidity(
         address tokenA,
@@ -15,4 +14,4 @@ interface IPancakeRouter {
     ) external returns (uint256 amountA, uint256 amountB, uint256 liquidity);
 
     function WETH() external pure returns (address);
-} 
+}
